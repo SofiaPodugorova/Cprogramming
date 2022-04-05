@@ -12,7 +12,8 @@ namespace ProstMnoj
         {
             Console.Write("n=");
             int n = int.Parse(Console.ReadLine());
-            List<int> div = GetFactors(n);
+            Factorization f = new Factorization();
+            List<int> div = f.GetFactors(n);
 
             Console.Write("n=");
             for (int i = 0; i < div.Count - 1; i++)
@@ -21,30 +22,45 @@ namespace ProstMnoj
 
             Console.ReadLine();
         }
-        private void Factorize(int k)
+
+        public class Factorization
         {
-            int mult = 1;
-            List<int> div = new List<int>();
-            for (int i = 2; i <= Math.Floor(Math.Sqrt(k)); i++)
+            List<int> Dividers;
+
+            public List<int> GetFactors(int n)
             {
-                if (k % i == 0) 
+                Dividers = new List<int>();
+                Factorize(n);
+                Dividers.Sort();
+                return Dividers;
+            }
+
+            private void Factorize(int k)
+            {
+                int mult = 1;
+                List<int> div = new List<int>();
+                for (int i = 2; i <= Math.Floor(Math.Sqrt(k)); i++)
                 {
-                    bool IsPrime = true;
-                    foreach (int j in div)
-                        if (i % j == 0) { IsPrime = false; break; }
-                    if (IsPrime)
+                    if (k % i == 0) 
                     {
-                        div.Add(i);
-                        mult *= i;
+                        bool IsPrime = true;
+                        foreach (int j in div)
+                            if (i % j == 0) { IsPrime = false; break; }
+                        if (IsPrime)
+                        {
+                            div.Add(i);
+                            mult *= i;
+                        }
                     }
                 }
-            }
-            if (mult == 1) ;  
-            else
-            {
-                int next = k / mult;
-                if (next == 1) return;
-                Factorize(next);
+                if (mult == 1) { Dividers.Add(k); return; } 
+                else
+                {
+                    Dividers.AddRange(div);
+                    int next = k / mult;
+                    if (next == 1) return;
+                    Factorize(next);
+                }
             }
         }
     }
