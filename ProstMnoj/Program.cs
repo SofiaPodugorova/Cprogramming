@@ -10,37 +10,42 @@ namespace ProstMnoj
     {
         static void Main(string[] args)
         {
-            string s = string.Empty;
-            int b, c, n;
+            Console.Write("n=");
+            int n = int.Parse(Console.ReadLine());
+            List<int> div = GetFactors(n);
 
-            Console.WriteLine("Введите номер ");
-            if (!int.TryParse(Console.ReadLine(), out n)) return;
+            Console.Write("n=");
+            for (int i = 0; i < div.Count - 1; i++)
+                Console.Write("{0}*", div[i]);
+            Console.WriteLine(div[div.Count - 1]);
 
-            while ((n % 2) == 0)
+            Console.ReadLine();
+        }
+        private void Factorize(int k)
+        {
+            int mult = 1;
+            List<int> div = new List<int>();
+            for (int i = 2; i <= Math.Floor(Math.Sqrt(k)); i++)
             {
-                n = n / 2;
-                s += "2*";
-            }
-            b = 3; c = (int)Math.Sqrt(n) + 1;
-            while (b < c)
-            {
-                if ((n % b) == 0)
+                if (k % i == 0) 
                 {
-                    if (n / b * b - n == 0)
+                    bool IsPrime = true;
+                    foreach (int j in div)
+                        if (i % j == 0) { IsPrime = false; break; }
+                    if (IsPrime)
                     {
-                        s += b.ToString() + "*";
-                        n = n / b;
-                        c = (int)Math.Sqrt(n) + 1;
+                        div.Add(i);
+                        mult *= i;
                     }
-                    else
-                        b += 2;
                 }
-                else
-                    b += 2;
             }
-            s += n.ToString();
-            Console.WriteLine(s);
-            Console.ReadKey(true);
+            if (mult == 1) ;  
+            else
+            {
+                int next = k / mult;
+                if (next == 1) return;
+                Factorize(next);
+            }
         }
     }
 }
